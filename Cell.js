@@ -14,6 +14,7 @@ class Cell {
 
     this.div = document.createElement("div");
     this.div.className = "cell";
+    this.div.innerHTML = "⬜";
 
     this.update();
 
@@ -24,6 +25,8 @@ class Cell {
     this.div.addEventListener("contextmenu", () => {
       this.rightClicked();
     });
+
+    parent.appendChild(this.div);
   }
 
   leftClicked() {}
