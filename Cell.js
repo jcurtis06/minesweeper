@@ -29,18 +29,39 @@ class Cell {
     parent.appendChild(this.div);
   }
 
-  leftClicked() {}
+  leftClicked() {
+    console.log(this);
+
+    if (this.cellVisibility) return;
+
+    this.reveal();
+
+    if (this.isBomb()) {
+      alert("GAME OVER");
+    }
+
+    if (this.isEmpty()) {
+      var queue = field.cycleCells(this.index, []);
+
+      for (let i = 1; i < queue.length; i++) {
+        setTimeout(function revealDelay() {
+          field.getCells()[queue[i]].reveal();
+        }, i * 5);
+      }
+    }
+  }
 
   rightClicked() {}
 
   update() {
     if (this.flagged) this.div.innerHTML = "🏴";
     else {
-      if (this.cellVisibility) {
-        if (this.cellType < 0) {
+      if (this.visible) {
+        if (this.cellType == -1) {
           this.div.classList.add("empty");
+          this.div.innerText = "🟩";
         }
-
+        /*
         if (this.cellType == 0) {
           this.div.classList.add("bomb");
 
@@ -83,6 +104,7 @@ class Cell {
         } else {
           this.div.innerText = "🔥";
         }
+        */
       }
     }
   }
