@@ -115,7 +115,7 @@ class Cell {
   }
 
   setType(cellType) {
-    this.cellType = type;
+    this.cellType = cellType;
   }
 
   setVisiblity(cellVisibility) {
@@ -125,6 +125,11 @@ class Cell {
   toggleFlag() {
     if (this.flagged) this.flagged = false;
     else this.flagged = true;
+  }
+
+  increaseBombs() {
+    if (this.cellType == -1) this.setType(1);
+    else this.cellType++;
   }
 
   isBomb() {

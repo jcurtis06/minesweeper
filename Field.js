@@ -28,6 +28,56 @@ class Field {
       }
       gameContainer.appendChild(rowDiv);
     }
+
+    this.placeBombs();
+  }
+
+  placeBombs() {
+    let setBombs = [];
+
+    for (let i = 0; i < this.bombs; i++) {
+      let number = Math.floor(
+        Math.random() * (this.rowCount * this.columnCount)
+      );
+
+      while (setBombs.indexOf(number) >= 0) {
+        number = Math.floor(Math.random() * (this.rowCount * this.columnCount));
+      }
+
+      setBombs.push(number);
+      this.cells[number].setType(0);
+      this.updateAdjacent(number);
+    }
+  }
+
+  updateAdjacent(cellIndex) {
+    let leftSide = cellIndex % this.columnCount === 0;
+    let rightSide = (cellIndex + 1) % this.columnCount === 0;
+    let topSide = cellIndex - this.columnCount < 0;
+    let bottomSide =
+      cellIndex + this.columnCount >= this.columnCount * this.rowCount;
+
+    if (!leftSide) {
+      this.cells[cellIndex - 1].increaseBombs();
+
+      if (!topSide)
+        this.cells[cellIndex - this.columnCount - 1].increaseBombs();
+
+      if (!bottomSide)
+        this.cells[cellIndex + this.columnCount - 1].increaseBombs();
+    }
+
+    if (!rightSide) {
+      this.cells[cellIndex + 1].increaseBombs();
+
+      if (!topSide)
+        this.cells[cellIndex - this.columnCount + 1].increaseBombs();
+      if (!bottomSide)
+        this.cells[cellIndex + this.columnCount + 1].increaseBombs();
+    }
+
+    if (!bottomSide) this.cells[cellIndex + this.columnCount].increaseBombs();
+    if (!topSide) this.cells[cellIndex - this.columnCount].increaseBombs();
   }
 
   cycleCells(startIndex, queue) {
