@@ -4,19 +4,19 @@ class Cell {
     this.cellType = -1;
     this.visible = false;
     this.flagged = false;
+    this.icon = "⬜";
   }
 
   generateDiv(parent) {
     if (this.div) {
-      this.update();
+      this.updateIcon();
       return;
     }
 
     this.div = document.createElement("div");
     this.div.className = "cell";
-    this.div.innerHTML = "⬜";
 
-    this.update();
+    this.updateIcon();
 
     this.div.addEventListener("click", () => {
       this.leftClicked();
@@ -30,14 +30,14 @@ class Cell {
   }
 
   leftClicked() {
-    console.log(this);
+    console.log("left clicked ", this);
 
     if (this.cellVisibility) return;
 
     this.reveal();
 
     if (this.isBomb()) {
-      alert("GAME OVER");
+      game.end();
     }
 
     if (this.isEmpty()) {
@@ -51,71 +51,69 @@ class Cell {
     }
   }
 
-  rightClicked() {}
+  rightClicked() {
+    console.log("right clicked ", this);
 
-  update() {
-    if (this.flagged) this.div.innerHTML = "🏴";
-    else {
+    this.toggleFlag();
+    this.updateIcon();
+  }
+
+  updateIcon() {
+    console.log(this.index + " is now " + this.cellType);
+
+    if (this.flagged) {
+      this.icon = "🏴";
+    } else {
       if (this.visible) {
-        if (this.cellType == -1) {
-          this.div.classList.add("empty");
-          this.div.innerText = "🟩";
+        switch (this.cellType) {
+          case -1:
+            this.icon = "🟩";
+            this.div.classList.add("empty");
+            break;
+          case 0:
+            this.icon = "💣";
+            this.div.classList.add("bomb");
+            break;
+          case 1:
+            this.icon = "1️⃣";
+            break;
+          case 2:
+            this.icon = "2️⃣";
+            break;
+          case 3:
+            this.icon = "3️⃣";
+            break;
+          case 4:
+            this.icon = "4️⃣";
+            break;
+          case 5:
+            this.icon = "5️⃣";
+            break;
+          case 6:
+            this.icon = "6️⃣";
+            break;
+          case 7:
+            this.icon = "7️⃣";
+            break;
+          case 8:
+            this.icon = "8️⃣";
+            break;
         }
-        /*
-        if (this.cellType == 0) {
-          this.div.classList.add("bomb");
 
-          if (fieldManager.isDead()) {
-            this.div.innerText = "💣";
-          } else {
-            this.div.innerText = "💥";
-          }
-        }
-
-        if (this.cellType > 0) {
-          this.div.classList.add("number");
-
-          switch (this.cellType) {
-            case 1:
-              this.div.innerText = "1️⃣";
-              break;
-            case 2:
-              this.div.innerText = "2️⃣";
-              break;
-            case 3:
-              this.div.innerText = "3️⃣";
-              break;
-            case 4:
-              this.div.innerText = "4️⃣";
-              break;
-            case 5:
-              this.div.innerText = "5️⃣";
-              break;
-            case 6:
-              this.div.innerText = "6️⃣";
-              break;
-            case 7:
-              this.div.innerText = "7️⃣";
-              break;
-            case 8:
-              this.div.innerText = "8️⃣";
-              break;
-          }
-        } else {
-          this.div.innerText = "🔥";
-        }
-        */
+        if (this.cellType > 0) this.div.classList.add("number");
       }
     }
+    this.div.innerHTML = this.icon;
   }
 
   reveal() {
     this.setVisiblity(true);
-    this.update();
+    this.updateIcon();
   }
 
   setType(cellType) {
     this.cellType = cellType;
+    console.log(this.index + " has been updated to " + cellType);
   }
 
   setVisiblity(cellVisibility) {
@@ -123,11 +121,13 @@ class Cell {
   }
 
   toggleFlag() {
-    if (this.flagged) this.flagged = false;
-    else this.flagged = true;
+    if (this.flagged) {
+      this.flagged = false;
+    } else this.flagged = true;
   }
 
   increaseBombs() {
+    if (this.cellType == 0) return;
     if (this.cellType == -1) this.setType(1);
     else this.cellType++;
   }
