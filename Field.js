@@ -32,10 +32,14 @@ class Field {
     this.placeBombs();
   }
 
-  destroy() {
+  revealAll() {
     for (let i = 0; i < this.cells.length; i++) {
       this.cells[i].reveal();
     }
+  }
+
+  clear() {
+    gameContainer.innerHTML = "";
   }
 
   placeBombs() {
@@ -133,5 +137,9 @@ class Field {
 
   getCells() {
     return this.cells;
+  }
+
+  getBombs() {
+    return this.bombs;
   }
 }

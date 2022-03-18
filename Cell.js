@@ -22,15 +22,26 @@ class Cell {
       this.leftClicked();
     });
 
-    this.div.addEventListener("contextmenu", () => {
+    this.div.addEventListener("contextmenu", (e) => {
       this.rightClicked();
+      e.preventDefault();
     });
 
     parent.appendChild(this.div);
   }
 
   leftClicked() {
-    console.log("left clicked ", this);
+    if (!game.isMining()) {
+      this.rightClicked();
+      return;
+    }
+
+    game.addMove();
+
+    if (this.flagged) {
+      this.toggleFlag();
+      return;
+    }
 
     if (this.cellVisibility) return;
 
@@ -52,15 +63,19 @@ class Cell {
   }
 
   rightClicked() {
-    console.log("right clicked ", this);
-
+    game.addMove();
     this.toggleFlag();
-    this.updateIcon();
+
+    if (this.flagged) {
+      if (this.isBomb()) game.addDefused();
+    } else {
+      if (this.isBomb()) game.removeDefused();
+    }
+
+    game.checkWin();
   }
 
   updateIcon() {
-    console.log(this.index + " is now " + this.cellType);
-
     if (this.flagged) {
       this.icon = "🏴";
     } else {
@@ -101,6 +116,8 @@ class Cell {
         }
 
         if (this.cellType > 0) this.div.classList.add("number");
+      } else {
+        this.icon = "⬜";
       }
     }
     this.div.innerHTML = this.icon;
@@ -113,7 +130,6 @@ class Cell {
 
   setType(cellType) {
     this.cellType = cellType;
-    console.log(this.index + " has been updated to " + cellType);
   }
 
   setVisiblity(cellVisibility) {
@@ -121,9 +137,19 @@ class Cell {
   }
 
   toggleFlag() {
+    if (this.visible) return;
+
     if (this.flagged) {
       this.flagged = false;
-    } else this.flagged = true;
+      game.addFlag();
+    } else {
+      if (game.getFlags() <= 0) return;
+
+      this.flagged = true;
+      game.removeFlag();
+    }
+
+    this.updateIcon();
   }
 
   increaseBombs() {
