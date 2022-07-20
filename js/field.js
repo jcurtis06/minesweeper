@@ -155,7 +155,7 @@ var fieldManager = (function () {
       stopTimer();
       revealAll();
       setRestartBtn();
-      message.innerText = "🥳 YOU WON! 🥳";
+      message.innerText = "🥳 YOU WIN! 🥳";
     }
   }
 
@@ -172,7 +172,7 @@ var fieldManager = (function () {
       stopTimer();
       revealAll();
       setRestartBtn();
-      message.innerText = "🥳 YOU WON! 🥳";
+      message.innerText = "🥳 YOU WIN! 🥳";
     }
   }
 
