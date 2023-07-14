@@ -1,4 +1,4 @@
-# Minesweeper💥
+# Minesweeper
 Minesweeper made in vanilla JS
 
 You can view it here https://jcurtis06.github.io/minesweeper/.
