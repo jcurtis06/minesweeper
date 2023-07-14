@@ -135,7 +135,7 @@ var fieldManager = (function () {
           stopTimer();
           revealAll();
           setRestartBtn();
-          message.innerText = "😵YOU LOSE😵";
+          message.innerText = "YOU LOSE";
         }
         if (cell.isEmpty()) {
           var queue = traverseMatrix(cell.index, []);
@@ -155,7 +155,7 @@ var fieldManager = (function () {
       stopTimer();
       revealAll();
       setRestartBtn();
-      message.innerText = "🥳 YOU WIN! 🥳";
+      message.innerText = "YOU WIN!";
     }
   }
 
